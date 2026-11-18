@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Energia no banho — vídeo SERS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap">
+<style>
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+body.ocioso { cursor: none; }
+#palco { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; }
+#palco > section { position: absolute; inset: 0; width: 1920px; height: 1080px; margin: 0; }
+#palco > section:not(.atual) { display: none; }
+#notas { display: none; position: fixed; left: 0; right: 0; bottom: 0; max-height: 40%; overflow: auto;
+  background: rgba(10,14,20,.94); color: #F3EFE6; font: 20px/1.45 Arial, sans-serif; padding: 18px 28px; box-sizing: border-box; }
+body.com-notas #notas { display: block; }
+#ajuda { position: fixed; right: 16px; top: 12px; color: #9AA8B6; font: 14px Arial, sans-serif; opacity: 0; transition: opacity .4s; }
+body.mostra-ajuda #ajuda { opacity: .9; }
+/* Estilos dos slides */
+section {
+  box-sizing: border-box;
+  padding: 128px;
+  background: #F6F3EC;
+  color: #1B2430;
+  font-family: 'Inter', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+section.escuro {
+  background: #17202B;
+  color: #F3EFE6;
+}
+
+h1, h2, h3 {
+  font-family: 'Space Grotesk', Arial, sans-serif;
+  margin: 0;
+}
+
+.sobre {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #9A4F06;
+  margin: 0 0 24px 0;
+}
+
+.escuro .sobre {
+  color: #F2B33D;
+}
+
+.titulo {
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 56px 0;
+  max-width: 1500px;
+}
+
+.texto {
+  font-size: 32px;
+  line-height: 1.4;
+  color: #3D4A57;
+  margin: 0;
+}
+
+.escuro .texto {
+  color: #C9D2DA;
+}
+
+.rodape {
+  position: absolute;
+  left: 128px;
+  bottom: 64px;
+  width: 1664px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 24px;
+  color: #5E6A78;
+}
+
+.escuro .rodape {
+  color: #9AA8B6;
+}
+
+.rodape p {
+  font-size: 24px;
+  margin: 0;
+}
+
+/* Capa */
+.capa-faixa {
+  width: 160px;
+  height: 12px;
+  background: #F2B33D;
+  margin: 0 0 40px 0;
+}
+
+.capa-titulo {
+  font-size: 120px;
+  font-weight: 700;
+  line-height: 1.05;
+  margin: 0 0 32px 0;
+  color: #F3EFE6;
+}
+
+.capa-sub {
+  font-size: 44px;
+  line-height: 1.25;
+  color: #C9D2DA;
+  margin: 0;
+}
+
+.capa-espaco {
+  flex: 1;
+}
+
+.capa-nomes {
+  display: flex;
+  gap: 96px;
+}
+
+.capa-nomes p {
+  font-size: 32px;
+  line-height: 1.4;
+  color: #F3EFE6;
+  margin: 0;
+}
+
+.capa-nomes .rm {
+  color: #9AA8B6;
+}
+
+/* Números grandes */
+.numeros {
+  display: flex;
+  gap: 48px;
+}
+
+.numero {
+  flex: 1;
+  background: #FFFDF8;
+  border: 2px solid #E3DDD0;
+  border-radius: 24px;
+  padding: 48px;
+}
+
+.numero .valor {
+  font-family: 'Space Grotesk', Arial, sans-serif;
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1;
+  color: #1B2430;
+  margin: 0 0 24px 0;
+}
+
+.numero .valor.destaque {
+  color: #9A4F06;
+}
+
+.numero .legenda {
+  font-size: 32px;
+  line-height: 1.35;
+  color: #3D4A57;
+  margin: 0;
+}
+
+.fonte {
+  font-size: 24px;
+  color: #5E6A78;
+  margin: 40px 0 0 0;
+}
+
+/* Comparação */
+.comparacao {
+  display: flex;
+  gap: 64px;
+  align-items: flex-start;
+}
+
+.tabela {
+  width: 1000px;
+  font-size: 32px;
+  color: #1B2430;
+}
+
+.tabela tr.cab {
+  background: #E9E3D6;
+}
+
+.tabela tr.forte {
+  background: #FBEBD0;
+}
+
+.sol {
+  flex: 1;
+  background: #17202B;
+  border-radius: 24px;
+  padding: 48px;
+}
+
+.sol .valor {
+  font-family: 'Space Grotesk', Arial, sans-serif;
+  font-size: 96px;
+  font-weight: 700;
+  line-height: 1;
+  color: #F2B33D;
+  margin: 0 0 16px 0;
+}
+
+.sol .texto-sol {
+  font-size: 32px;
+  line-height: 1.35;
+  color: #F3EFE6;
+  margin: 0 0 40px 0;
+}
+
+.sol .nota {
+  font-size: 24px;
+  line-height: 1.4;
+  color: #9AA8B6;
+  margin: 0;
+}
+
+/* Demonstração */
+.demo {
+  display: flex;
+  gap: 64px;
+  align-items: flex-start;
+}
+
+.passos {
+  width: 720px;
+  font-size: 32px;
+  line-height: 1.4;
+  color: #F3EFE6;
+  margin: 0;
+  padding-left: 48px;
+}
+
+.passos li {
+  margin: 0 0 24px 0;
+}
+
+.terminal {
+  flex: 1;
+  background: #0E141B;
+  border: 2px solid #2C3A48;
+  border-radius: 20px;
+  padding: 40px 44px;
+}
+
+.terminal p {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 26px;
+  line-height: 1.55;
+  color: #D7E3EC;
+  margin: 0;
+}
+
+.terminal .prompt {
+  color: #F2B33D;
+  margin: 0 0 16px 0;
+}
+
+/* Recomendações */
+.colunas {
+  display: flex;
+  gap: 64px;
+}
+
+.coluna {
+  flex: 1;
+}
+
+.coluna h3 {
+  font-size: 44px;
+  font-weight: 700;
+  margin: 0 0 32px 0;
+}
+
+.cartao {
+  background: #FFFDF8;
+  border: 2px solid #E3DDD0;
+  border-radius: 20px;
+  padding: 28px 36px;
+  margin: 0 0 20px 0;
+}
+
+.cartao .quem {
+  font-size: 24px;
+  font-weight: 600;
+  color: #9A4F06;
+  margin: 0 0 8px 0;
+}
+
+.cartao .oque {
+  font-size: 32px;
+  line-height: 1.3;
+  color: #1B2430;
+  margin: 0;
+}
+
+.limites {
+  font-size: 32px;
+  line-height: 1.4;
+  color: #3D4A57;
+  margin: 0;
+  padding-left: 40px;
+}
+
+.limites li {
+  margin: 0 0 20px 0;
+}
+
+/* Encerramento */
+.fatos {
+  display: flex;
+  gap: 48px;
+  margin: 0 0 56px 0;
+}
+
+.fato {
+  flex: 1;
+  border-top: 6px solid #F2B33D;
+  padding: 28px 0 0 0;
+}
+
+.fato .valor {
+  font-family: 'Space Grotesk', Arial, sans-serif;
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1;
+  color: #F3EFE6;
+  margin: 0 0 16px 0;
+}
+
+.fato .legenda {
+  font-size: 28px;
+  line-height: 1.35;
+  color: #C9D2DA;
+  margin: 0;
+}
+
+.link {
+  font-size: 44px;
+  font-weight: 600;
+  color: #F2B33D;
+  margin: 0;
+}
+
+</style>
+</head>
+<body class="mostra-ajuda">
+<div id="palco">
+<section id="capa" class="escuro">
+<div class="capa-faixa"></div>
+<p class="sobre">Global Solution 2026.2 · Soluções em Energias Renováveis e Sustentáveis</p>
+<h1 class="capa-titulo">Energia no banho</h1>
+<p class="capa-sub">A contribuição de energia ao Citizen Assist AI</p>
+<div class="capa-espaco"></div>
+<div class="capa-nomes">
+<div><p>Guilherme Figueira Velloso</p><p class="rm">RM 568827</p></div>
+<div><p>José Manfrinato</p><p class="rm">RM 571151</p></div>
+<div><p>Ciência da Computação</p><p class="rm">Turma 1CCA</p></div>
+</div>
+</section>
+<section id="publico">
+<p class="sobre">Público e necessidade</p>
+<h2 class="titulo">Famílias da Enel SP que esquentam o banho com chuveiro elétrico</h2>
+<div class="numeros">
+<div class="numero"><p class="valor">0,92 kWh</p><p class="legenda">por banho de 10 minutos num chuveiro de 5.500 W (5,5 kW × 1/6 h)</p></div>
+<div class="numero"><p class="valor">1.338 kWh</p><p class="legenda">por ano, numa casa de 4 pessoas com um banho por dia cada</p></div>
+<div class="numero"><p class="valor destaque">R$ 1.056</p><p class="legenda">por ano só com o banho, sem contar impostos</p></div>
+</div>
+<p class="fonte">Tarifa residencial B1 da Enel SP: R$ 0,78938 por kWh (ANEEL, Resolução Homologatória nº 3.596/2026).</p>
+</section>
+<section id="analise">
+<p class="sobre">Análise e comparação · mesmo ano, mesma necessidade</p>
+<h2 class="titulo">Banho curto não custa nada; o aquecedor solar economiza mais</h2>
+<div class="comparacao">
+<table class="tabela">
+<tr class="cab"><th style="width:40%">Alternativa</th><th style="width:20%">Economia por ano</th><th style="width:22%">Investimento</th><th style="width:18%">Retorno</th></tr>
+<tr><td>A · Banho de 7 minutos</td><td>R$ 317</td><td>nenhum</td><td>imediato</td></tr>
+<tr><td>B · Aquecedor solar (renovável)</td><td>R$ 810</td><td>R$ 3.360</td><td>4,1 anos</td></tr>
+<tr class="forte"><td>A + B · As duas juntas</td><td>R$ 964</td><td>R$ 3.360</td><td>3,5 anos</td></tr>
+</table>
+<div class="sol">
+<p class="valor">77%</p>
+<p class="texto-sol">da energia do banho vem do sol ao longo do ano, mas só 58% em junho</p>
+<p class="nota">Método f-chart com dados da NASA POWER; custo pela tabela SINAPI.</p>
+</div>
+</div>
+</section>
+<section id="demo" class="escuro">
+<p class="sobre">Demonstração no assistente</p>
+<h2 class="titulo">A recomendação muda conforme a casa</h2>
+<div class="demo">
+<ol class="passos">
+<li>Opção 2 com a família de referência e telhado “s”</li>
+<li>Opção 2 de novo com telhado “n”, como quem mora de aluguel</li>
+<li>Uma letra no lugar de um número: mensagem de erro</li>
+<li>Opção 7: kWh, potência e tarifa explicados</li>
+</ol>
+<div class="terminal">
+<p class="prompt">$ python3 src/assistente_energia.py</p>
+<p>--- O que o Citizen Assist AI recomenda ---</p>
+<p>1) Comece limitando cada banho a 7 minutos:</p>
+<p>não custa nada e pode economizar cerca de</p>
+<p>R$ 316,94 por ano (402 kWh)</p>
+<p>2) O aquecedor solar vale um orçamento:</p>
+<p>retorno em 4,1 anos</p>
+</div>
+</div>
+</section>
+<section id="recomendacoes">
+<p class="sobre">Recomendações e limitações</p>
+<h2 class="titulo">Primeiro o banho curto, depois o sol</h2>
+<div class="colunas">
+<div class="coluna">
+<h3>Recomendamos</h3>
+<div class="cartao"><p class="quem">Todas as casas</p><p class="oque">Banho de até 7 minutos, sem custo</p></div>
+<div class="cartao"><p class="quem">Casa própria com telhado ao sol</p><p class="oque">Orçamento de aquecedor solar</p></div>
+<div class="cartao"><p class="quem">Apartamento ou aluguel</p><p class="oque">Só o banho curto</p></div>
+</div>
+<div class="coluna">
+<h3>Limitações</h3>
+<ul class="limites">
+<li>A tarifa não inclui ICMS, PIS/COFINS nem bandeira</li>
+<li>O coletor solar tem parâmetros típicos, não de um modelo testado</li>
+<li>O custo do SINAPI é uma média nacional</li>
+<li>São estimativas, não garantias de economia</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="encerramento" class="escuro">
+<p class="sobre">Encerramento</p>
+<h2 class="titulo">Fontes, cálculos e testes estão no repositório</h2>
+<div class="fatos">
+<div class="fato"><p class="valor">7 referências</p><p class="legenda">com data de consulta, entre elas ANEEL, MCTI, NASA POWER e SINAPI</p></div>
+<div class="fato"><p class="valor">28 testes</p><p class="legenda">automáticos dos cálculos, incluindo um mês do f-chart feito à mão</p></div>
+<div class="fato"><p class="valor">3 usuários</p><p class="legenda">testaram o assistente: facilidade 4,3 e utilidade 4,7, de 1 a 5</p></div>
+</div>
+<p class="link">[link do repositório no GitHub]</p>
+</section>
+</div>
+<div id="notas"></div>
+<div id="ajuda">→ / espaço / clique: avançar · ←: voltar · F: tela cheia · N: notas</div>
+<script>
+const NOTAS = ["Cena 1 (0:00 a 0:20). Apresentem-se com nome e RM. Fala: “Esta é a contribuição de Soluções em Energias Renováveis e Sustentáveis ao Citizen Assist AI: um módulo que orienta famílias sobre o gasto de energia do banho.”", "Cena 2 (0:20 a 0:45). Fala: “Nosso público são famílias da área da Enel SP que esquentam a água do banho com chuveiro elétrico. Um chuveiro de 5.500 W ligado por 10 minutos gasta 0,92 kWh. Numa casa de 4 pessoas, isso dá 1.338 kWh e cerca de R$ 1.056 por ano, sem impostos.”", "Cena 3 (0:45 a 1:25). Mostrem também o gráfico mensal (analise/grafico_mensal.svg). Fala: “Comparamos, para o mesmo ano: A, banho de 7 minutos, que não custa nada e economiza R$ 317; B, aquecedor solar, fonte renovável, que custa R$ 3.360 pela tabela SINAPI e economiza R$ 810, com retorno em cerca de 4 anos. Calculamos a parte do sol mês a mês pelo método f-chart com dados da NASA: 77% no ano, só 58% em junho.”", "Cena 4 (1:25 a 2:20). Mostrem este slide por poucos segundos e passem para o terminal. Rodem python3 src/assistente_energia.py dentro da pasta citizen-assist-energia. Sigam os quatro passos do slide. Ao responder “n” para o telhado, mostrem que a recomendação passa a ser só o banho curto. Ao mostrar a opção 7, digam que ela foi criada depois dos testes com usuários, porque os três participantes não entendiam kWh, potência e tarifa.", "Cena 5 (2:20 a 2:50). Se der tempo, mostrem a opção 6 do assistente. Fala: “Recomendamos começar pelo banho mais curto, que serve para qualquer casa. O aquecedor solar vale um orçamento para quem tem casa própria com telhado ao sol: o retorno fica entre 3,7 e 8,4 anos, conforme o coletor e o custo da instalação. Quem mora em apartamento ou de aluguel fica com o banho curto, porque o solar exige obra no telhado. Os valores são estimativas: a tarifa não tem impostos, o coletor tem parâmetros típicos e o custo é uma média nacional.”", "Cena 6 (2:50 a 3:00). Troquem o texto entre colchetes pelo link do repositório antes de gravar. Fala: “Fontes, cálculos e testes estão no repositório. Obrigado.”"];
+const slides = [...document.querySelectorAll('#palco > section')];
+const palco = document.getElementById('palco');
+const caixaNotas = document.getElementById('notas');
+let atual = 0;
+
+function ajustar() {
+  const escala = Math.min(innerWidth / 1920, innerHeight / 1080);
+  palco.style.transform = `scale(${escala}) translate(-50%, -50%)`;
+}
+
+function mostrar(i) {
+  atual = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((s, k) => s.classList.toggle('atual', k === atual));
+  caixaNotas.textContent = `Slide ${atual + 1} de ${slides.length} — ${NOTAS[atual]}`;
+  history.replaceState(null, '', '#' + (atual + 1));
+}
+
+addEventListener('keydown', e => {
+  if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); mostrar(atual + 1); }
+  else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); mostrar(atual - 1); }
+  else if (e.key === 'Home') mostrar(0);
+  else if (e.key === 'End') mostrar(slides.length - 1);
+  else if (e.key === 'f' || e.key === 'F') {
+    if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
+  }
+  else if (e.key === 'n' || e.key === 'N') document.body.classList.toggle('com-notas');
+});
+addEventListener('click', e => { if (!e.target.closest('#notas')) mostrar(atual + 1); });
+addEventListener('resize', ajustar);
+
+let timer;
+addEventListener('mousemove', () => {
+  document.body.classList.remove('ocioso');
+  clearTimeout(timer);
+  timer = setTimeout(() => document.body.classList.add('ocioso'), 1500);
+});
+setTimeout(() => document.body.classList.remove('mostra-ajuda'), 4000);
+
+ajustar();
+mostrar((parseInt(location.hash.slice(1), 10) || 1) - 1);
+</script>
+</body>
+</html>

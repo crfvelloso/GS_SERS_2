@@ -1,0 +1,120 @@
+{
+  "_descricao": "Parametros usados nos calculos. 'tipo' indica se o valor vem de fonte publica ('real') ou e uma premissa do grupo ('estimado'). Consulta das fontes em 17/11/2026.",
+
+  "tarifa_b1_r_kwh": {
+    "valor": 0.78938,
+    "unidade": "R$/kWh",
+    "tipo": "real",
+    "descricao": "Tarifa residencial B1 da Enel SP (TUSD 472,42 + TE 316,96 R$/MWh), sem ICMS, PIS/COFINS e bandeira tarifaria",
+    "fonte": "Enel Distribuição São Paulo - Tarifa de Energia Elétrica, Resolução Homologatória ANEEL nº 3.596/2026, válida a partir de 04/07/2026",
+    "url": "https://www.enel.com.br/pt-saopaulo/Para_Voce/tarifa-energia-eletrica.html"
+  },
+
+  "fator_emissao_kgco2_kwh": {
+    "valor": 0.0461,
+    "unidade": "kg CO2/kWh",
+    "tipo": "real",
+    "descricao": "Fator medio anual de emissao de CO2 do Sistema Interligado Nacional em 2025, para inventarios (0,0461 tCO2/MWh)",
+    "fonte": "MCTI - SIRENE, Fatores de emissão de CO2 da geração de energia elétrica no SIN, planilha 'Inventários Corporativos'",
+    "url": "https://www.gov.br/mcti/pt-br/acompanhe-o-mcti/sirene/dados-e-ferramentas/fatores-de-emissao"
+  },
+
+  "irradiacao_kwh_m2_dia": {
+    "valor": {"jan": 5.2289, "fev": 5.4396, "mar": 4.9123, "abr": 4.3562, "mai": 3.5225, "jun": 3.2578,
+              "jul": 3.4793, "ago": 4.1513, "set": 4.4232, "out": 4.9058, "nov": 5.2334, "dez": 5.4898},
+    "media_anual": 4.5288,
+    "unidade": "kWh/m2/dia (plano horizontal)",
+    "tipo": "real",
+    "descricao": "Irradiacao solar global horizontal media mensal em Sao Paulo (lat -23,55; lon -46,63), climatologia 2001-2025",
+    "fonte": "NASA POWER - Climatology API v2.10.1, parâmetro ALLSKY_SFC_SW_DWN",
+    "url": "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=ALLSKY_SFC_SW_DWN,T2M&community=RE&longitude=-46.63&latitude=-23.55&format=JSON"
+  },
+
+  "custo_aquecedor_solar_r": {
+    "valor": 3359.57,
+    "unidade": "R$ por sistema instalado",
+    "tipo": "real",
+    "descricao": "Aquecedor solar compacto com reservatorio de 200 L e coletor de 2,0 m2, fornecimento e instalacao (custo medio nacional, nao desonerado)",
+    "fonte": "SINAPI (Caixa/IBGE), composição 103517, referência 09/2026; insumo 34472 (kit sem instalação: R$ 3.240,00)",
+    "url": "https://orcamentor.com/composicao/103517/"
+  },
+
+  "custo_aquecedor_solar_alto_r": {
+    "valor": 6000.0,
+    "unidade": "R$ por sistema instalado",
+    "tipo": "estimado",
+    "descricao": "Cenario de custo alto, para casas que precisam de adaptacao da tubulacao de agua quente; usado so na analise de sensibilidade"
+  },
+
+  "temperatura_ar_c": {
+    "valor": {"jan": 22.31, "fev": 22.39, "mar": 21.57, "abr": 20.01, "mai": 17.12, "jun": 16.30,
+              "jul": 15.91, "ago": 17.22, "set": 19.15, "out": 20.73, "nov": 20.91, "dez": 22.09},
+    "unidade": "graus Celsius",
+    "tipo": "real",
+    "descricao": "Temperatura media mensal do ar a 2 m em Sao Paulo, climatologia 2001-2025. Tambem usada como temperatura da agua da rede (premissa)",
+    "fonte": "NASA POWER - Climatology API v2.10.1, parâmetro T2M",
+    "url": "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=ALLSKY_SFC_SW_DWN,T2M&community=RE&longitude=-46.63&latitude=-23.55&format=JSON"
+  },
+
+  "coletor_solar": {
+    "_descricao": "Parametros do aquecedor solar usados no metodo f-chart (Duffie e Beckman, Solar Engineering of Thermal Processes, cap. 20)",
+    "area_m2": {
+      "valor": 2.0, "unidade": "m2", "tipo": "real",
+      "fonte": "SINAPI, insumo 34472 (kit compacto 200 L, placa de 2,0 m2)"
+    },
+    "volume_reservatorio_l": {
+      "valor": 200, "unidade": "L", "tipo": "real",
+      "fonte": "SINAPI, insumo 34472"
+    },
+    "fr_ta_n": {
+      "valor": 0.70, "faixa_sensibilidade": [0.65, 0.75], "unidade": "adimensional", "tipo": "estimado",
+      "descricao": "FR(ta)n: eficiencia optica do coletor plano com cobertura de vidro (valor tipico; o grupo nao teve acesso ao laudo do kit do SINAPI)"
+    },
+    "fr_ul_w_m2k": {
+      "valor": 5.5, "faixa_sensibilidade": [6.5, 4.5], "unidade": "W/(m2.K)", "tipo": "estimado",
+      "descricao": "FR.UL: coeficiente de perdas termicas do coletor plano com cobertura de vidro (valor tipico)"
+    },
+    "razao_ta": {
+      "valor": 0.94, "unidade": "adimensional", "tipo": "estimado",
+      "descricao": "(ta)/(ta)n: correcao media mensal do angulo de incidencia para coletor com uma cobertura de vidro, valor sugerido por Duffie e Beckman"
+    },
+    "temp_agua_quente_c": {
+      "valor": 45, "unidade": "graus Celsius", "tipo": "estimado",
+      "descricao": "Temperatura em que a agua quente e mantida no reservatorio"
+    }
+  },
+
+  "producao_coletor_referencia_kwh_mes": {
+    "valor": 165.2,
+    "unidade": "kWh/mes por coletor de 1,96 m2",
+    "tipo": "real",
+    "descricao": "Producao mensal declarada para um coletor classe A de 1,96 m2 nas condicoes de ensaio do Inmetro. Usada so como conferencia de ordem de grandeza",
+    "fonte": "Komeco, ficha técnica da linha Maxime Prime",
+    "url": "https://www.komeco.com.br/arquivos/datasheet/aquecimento-solar/coletor-solar/datasheet-coletor-solar-linha-maxime-prime.pdf"
+  },
+
+  "vida_util_aquecedor_anos": {
+    "valor": 15,
+    "unidade": "anos",
+    "tipo": "estimado",
+    "descricao": "Horizonte usado para a economia acumulada do aquecedor solar"
+  },
+
+  "cenario_referencia": {
+    "tipo": "estimado",
+    "descricao": "Familia de referencia usada na comparacao. O assistente permite trocar todos os valores pelos da casa do usuario.",
+    "pessoas": 4,
+    "potencia_chuveiro_w": 5500,
+    "minutos_por_banho": 10,
+    "banhos_por_pessoa_dia": 1,
+    "minutos_por_banho_alternativa_a": 7,
+    "vazao_chuveiro_l_min": 3.0
+  },
+
+  "agua": {
+    "calor_especifico_kj_kg_c": 4.186,
+    "densidade_kg_l": 1.0,
+    "tipo": "real",
+    "descricao": "Propriedades da agua usadas para conferir a elevacao de temperatura (Q = m c dT)"
+  }
+}

@@ -1,0 +1,5 @@
+situacao,kwh_ano,custo_r_ano,economia_r_ano,investimento_r,retorno_anos,fracao_solar,co2_kg_ano,co2_evitado_kg_ano,economia_liquida_15_anos_r
+atual,1338.3,1056.45,0.0,0.0,,0.0,61.7,0.0,0.0
+A,936.8,739.52,316.94,0.0,,0.0,43.2,18.5,4754.04
+B,312.6,246.73,809.72,3359.57,4.15,0.766,14.4,47.3,8786.26
+A+B,117.7,92.92,963.53,3359.57,3.49,0.874,5.4,56.3,11093.41
